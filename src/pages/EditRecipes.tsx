@@ -76,7 +76,8 @@ const EditRecipes = () => {
   // --- Delete Confirmation Modal ---
    const DeleteConfirmationModal = () => {
     if (!isDeleteModalOpen) return null;
-    const recipeName = recipeDetailResponse?.data?.data?.name || 'this recipe';
+    // BENAR:
+const recipeName = recipeDetailResponse?.data?.name || 'this recipe';
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -164,22 +165,23 @@ const EditRecipes = () => {
         ) : isRecipeLoading ? (
              // This state is covered by the overlay, but keep a placeholder if needed
              <div className="text-gray-600 text-center py-10">Loading...</div>
-        ) : !recipeDetailResponse?.data?.data ? (
-            <div className="text-gray-600 text-center p-4 bg-yellow-50 rounded border border-yellow-200">
-                Recipe data not found. It might have been deleted or you lack permission.
-            </div>
+        // BENAR:
+        ) : !recipeDetailResponse?.data ? (
+          <div className="text-gray-600 text-center p-4 bg-yellow-50 rounded border border-yellow-200">
+              Recipe data not found or could not be loaded correctly.
+          </div>
+        // ...
         ) : (
           <>
             {/* Render the form */}
-             <RecipesForm
+            // BENAR:
+              <RecipesForm
                 isEdit={true}
                 mutateFn={editRecipeMutation.mutate}
-                defaultInputData={recipeDetailResponse.data.data}
-                // Removed isLoading prop
+                defaultInputData={recipeDetailResponse.data} // <-- Perubahan di sini
                 showDeleteButton={true}
-                onDelete={handleDelete} // Passed to the form's internal delete button
-                // Removed isDeleting prop
-            />
+                onDelete={handleDelete}
+              />
 
             {/* Display edit mutation errors below the form */}
             {editRecipeMutation.isError && (
