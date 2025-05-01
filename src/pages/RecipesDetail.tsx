@@ -6,21 +6,24 @@ import { useAuth } from "../utils/AuthProvider";
 import { RecipesFormInput } from "../components/RecipesForm"; // Import type if needed
 
 // Define the structure for detailed recipe data from API
-interface RecipeDetailType extends RecipesFormInput { // Reuse form input type for fields
+interface RecipeDetailType extends RecipesFormInput {
   id: number;
-  // Add any extra fields specific to detail view (e.g., created date, author)
-  meta?: {
-    createdAt: string;
-    updatedAt: string;
-  };
+  userId?: number; // Tambahkan jika perlu
+  createdAt?: string; // Pindahkan dari meta
+  updatedAt?: string; // Pindahkan dari meta
+  // Hapus meta jika tidak digunakan lagi:
+  // meta?: {
+  //   createdAt: string;
+  //   updatedAt: string;
+  // };
 }
 
 // Async function to fetch recipe details
 export const fetchRecipeDetail = async (id: string | undefined, token: string | null) => {
-  if (!id) throw new Error("Recipe ID is missing");
-  if (!token) throw new Error("Authentication token is missing");
-  // Adjust API endpoint
-  return await axios.get<{ data: RecipeDetailType }>(`/api/recipes/${id}`, {
+  // ... (checks for id and token)
+  // Adjust API endpoint and generic type
+  // OLD: return await axios.get<{ data: RecipeDetailType }>(`/api/recipes/${id}`, { ... });
+  return await axios.get<RecipeDetailType>(`/api/recipes/${id}`, { // <-- Ubah di sini
     headers: { Authorization: `Bearer ${token}` }
   });
 };
@@ -74,7 +77,7 @@ const RecipesDetail = () => {
   };
 
   // Destructure recipe data safely
-  const recipe = recipeDetailResponse?.data?.data; // Adjust based on your actual API response structure
+  const recipe = recipeDetailResponse?.data; // Adjust based on your actual API response structure
   const totalTime = recipe ? recipe.prepTime + recipe.cookTime : 0;
 
   // --- Render Logic ---
@@ -211,13 +214,14 @@ const RecipesDetail = () => {
                     </div>
                 </div>
 
-                 {/* Optional: Display Meta Data */}
-                {recipe.meta && (
-                    <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-right">
-                        <p>Created: {new Date(recipe.meta.createdAt).toLocaleString()}</p>
-                        <p>Last Updated: {new Date(recipe.meta.updatedAt).toLocaleString()}</p>
-                    </div>
-                )}
+                 {/* Ganti pengecekan dan akses ke field langsung */}
+{recipe.createdAt && recipe.updatedAt && ( // Cek apakah field createdAt dan updatedAt ada di recipe
+    <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-right">
+        {/* Akses createdAt dan updatedAt langsung dari recipe */}
+        <p>Created: {new Date(recipe.createdAt).toLocaleString()}</p>
+        <p>Last Updated: {new Date(recipe.updatedAt).toLocaleString()}</p>
+    </div>
+)}
             </div>
         </div>
         <Link to="/recipes" className="inline-block mt-6 text-indigo-600 hover:underline">← Back to All Recipes</Link>
