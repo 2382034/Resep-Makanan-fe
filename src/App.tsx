@@ -23,10 +23,18 @@ import RecipesDetail from "./pages/RecipesDetail";
 import EditRecipes from "./pages/EditRecipes";
 // --- End Import Recipes Pages ---
 
+// --- Import Posting Pages ---
+import Postings from "./pages/Postings";
+import AddPosting from "./pages/AddPosting";
+import PostingDetail from "./pages/PostingDetail";
+import EditPosting from "./pages/EditPosting";
+// --- End Import Posting Pages ---
+
 // Utils & Providers
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
 import { AuthProvider } from "./utils/AuthProvider";
+
 
 const queryClient = new QueryClient();
 
@@ -65,6 +73,42 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          
+          {/* --- Recipes Routes --- */}
+          <Route
+            path="postings" // Route to list all recipes
+            element={
+              <PrivateRoute>
+                <Postings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="add-recipe" // Route to add a new recipe
+            element={
+              <PrivateRoute>
+                <AddPosting />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="recipes/:id" // Route to view recipe details
+            element={
+              <PrivateRoute>
+                <PostingDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="recipes/edit/:id" // Route to edit a recipe
+            element={
+              <PrivateRoute>
+                <EditPosting />
+              </PrivateRoute>
+            }
+          />
+          {/* --- End Recipes Routes --- */}
 
           {/* --- Recipes Routes --- */}
           <Route
