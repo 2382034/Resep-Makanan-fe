@@ -11,6 +11,7 @@ import { useAuth } from "../utils/AuthProvider";
 
 const navigation = [
   { name: "Home", to: "/", current: false },
+  { name: "Post", to: "/postings", current:false},
   { name: "Recipes", to: "/recipes", current: false},
 ];
 
